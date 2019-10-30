@@ -11,7 +11,6 @@ function App() {
 
   useEffect(() => {
     function handlePortalEvent(ev) {
-      console.log('from portal:', ev);
       if (ev.data && ev.data.source === 'portal') {
         if (ev.data.type === 'context') {
           setCtx(ev.data.payload);
