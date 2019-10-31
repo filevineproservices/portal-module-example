@@ -1,13 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Demo from './Demo';
 import Sample from './Sample';
+import Projects from './Projects';
+import {
+  ProjectsStateContext,
+  ProjectsDispatchContext,
+  projectsReducer,
+  initialState
+} from './ProjectsContext';
 
 function App() {
   const [ctx, setCtx] = useState({});
   const [location, setLocation] = useState({});
+  const [projectsState, dispatch] = useReducer(projectsReducer, initialState);
 
   useEffect(() => {
     function handlePortalEvent(ev) {
@@ -49,6 +57,17 @@ function App() {
           exact
           path="/acme/sample"
           render={routeProps => <Sample {...routeProps} {...filevineProps} />}
+        />
+        <Route
+          exact
+          path="/acme/projects"
+          render={routeProps => (
+            <ProjectsStateContext.Provider value={projectsState}>
+              <ProjectsDispatchContext.Provider value={dispatch}>
+                <Projects {...routeProps} {...filevineProps} />
+              </ProjectsDispatchContext.Provider>
+            </ProjectsStateContext.Provider>
+          )}
         />
         <Route
           exact
